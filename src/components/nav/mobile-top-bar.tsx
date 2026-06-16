@@ -72,7 +72,7 @@ export function MobileTopBar({ title }: { title?: string }) {
           textOverflow: 'ellipsis',
           whiteSpace: 'nowrap',
         }}>
-          {title || 'mySawit'}
+          {title || 'REKAPAL'}
         </span>
       </div>
     </header>

@@ -83,8 +83,8 @@ function SidebarContent({ kaplings, onAddKapling }: SidebarProps) {
           <PalmIcon />
         </div>
         <div>
-          <div style={{ color: '#f0fdf4', fontWeight: 700, fontSize: 'calc(15px * var(--text-scale, 1))', lineHeight: 1.2 }}>mySawit</div>
-          <div style={{ color: 'var(--sidebar-text-muted)', fontSize: 'calc(11px * var(--text-scale, 1))' }}>Manajemen Kebun</div>
+          <div style={{ color: '#f0fdf4', fontWeight: 700, fontSize: 'calc(15px * var(--text-scale, 1))', lineHeight: 1.2 }}>REKAPAL</div>
+          <div style={{ color: 'var(--sidebar-text-muted)', fontSize: 'calc(11px * var(--text-scale, 1))' }}>Rekapan Kapling</div>
         </div>
       </div>
 

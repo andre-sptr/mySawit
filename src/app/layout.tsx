@@ -24,7 +24,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "mySawit — Manajemen Kebun Sawit",
+  title: "REKAPAL — Rekapan Kapling Kelapa Sawit",
   description: "Platform digital manajemen kapling kebun sawit: panen, perawatan, pengeluaran, dan penjualan",
 };
 
