@@ -1,0 +1,68 @@
+import type { Metadata } from "next";
+import { Fraunces, Geist_Mono, Plus_Jakarta_Sans } from "next/font/google";
+import "./globals.css";
+import { prisma } from "@/lib/prisma";
+import { SidebarProvider } from "@/components/nav/sidebar-provider";
+import { SidebarShell } from "@/components/nav/sidebar-shell";
+import { MobileTopBar } from "@/components/nav/mobile-top-bar";
+
+const plusJakarta = Plus_Jakarta_Sans({
+  variable: "--font-plus-jakarta",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+export const metadata: Metadata = {
+  title: "mySawit — Manajemen Kebun Sawit",
+  description: "Platform digital manajemen kapling kebun sawit: panen, perawatan, pengeluaran, dan penjualan",
+};
+
+export default async function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  // Fetch all kaplings for sidebar (both active and inactive)
+  const kaplings = await prisma.kapling.findMany({
+    orderBy: { createdAt: "asc" },
+  });
+
+  return (
+    <html
+      lang="id"
+      className={`${plusJakarta.variable} ${fraunces.variable} ${geistMono.variable} h-full antialiased`}
+    >
+      <body style={{ minHeight: "100dvh", display: "flex", flexDirection: "column" }}>
+        <SidebarProvider>
+          {/* App Shell */}
+          <div style={{ display: "flex", minHeight: "100dvh" }}>
+            {/* Sidebar */}
+            <SidebarShell kaplings={kaplings} />
+
+            {/* Main area */}
+            <div style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0, overflowX: "hidden" }}>
+              {/* Mobile top bar */}
+              <MobileTopBar />
+
+              {/* Page content */}
+              <main style={{ flex: 1 }}>
+                {children}
+              </main>
+            </div>
+          </div>
+        </SidebarProvider>
+      </body>
+    </html>
+  );
+}

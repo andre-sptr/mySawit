@@ -1,0 +1,89 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+enum MaintenanceType {
+  SEMPROT
+  BABAT
+  PUPUK
+}
+
+enum ExpenseCategory {
+  GAJI_KARYAWAN
+  LAIN_LAIN
+}
+
+model Kapling {
+  id          String        @id @default(cuid())
+  name        String        @unique
+  isActive    Boolean       @default(true)
+  harvests    Harvest[]
+  maintenance Maintenance[]
+  expenses    Expense[]
+  sales       Sale[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model Harvest {
+  id          String   @id @default(cuid())
+  kaplingId   String
+  kapling     Kapling  @relation(fields: [kaplingId], references: [id], onDelete: Restrict)
+  harvestDate DateTime
+  weightKg    Float
+  photoPath   String?
+  note        String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([kaplingId, harvestDate])
+}
+
+model Maintenance {
+  id           String          @id @default(cuid())
+  kaplingId    String
+  kapling      Kapling         @relation(fields: [kaplingId], references: [id], onDelete: Restrict)
+  activityDate DateTime
+  type         MaintenanceType
+  cost         Float?
+  photoPath    String?
+  note         String?
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+
+  @@index([kaplingId, activityDate])
+}
+
+model Expense {
+  id          String          @id @default(cuid())
+  kaplingId   String
+  kapling     Kapling         @relation(fields: [kaplingId], references: [id], onDelete: Restrict)
+  expenseDate DateTime
+  category    ExpenseCategory
+  amount      Float
+  photoPath   String?
+  note        String?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@index([kaplingId, expenseDate])
+}
+
+model Sale {
+  id         String   @id @default(cuid())
+  kaplingId  String
+  kapling    Kapling  @relation(fields: [kaplingId], references: [id], onDelete: Restrict)
+  saleDate   DateTime
+  weightKg   Float
+  pricePerKg Float
+  photoPath  String?
+  note       String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([kaplingId, saleDate])
+}
