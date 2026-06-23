@@ -279,6 +279,7 @@ export async function deleteMaintenance(
 ): Promise<ActionResult> {
   try {
     const id = requiredText(formData, 'id', 'Perawatan')
+    // Read before delete so notify can include record details in the deletion message.
     const existing = await prisma.maintenance.findUnique({
       where: { id },
       include: { kapling: { select: { name: true } } },
@@ -366,6 +367,7 @@ export async function deleteExpense(
 ): Promise<ActionResult> {
   try {
     const id = requiredText(formData, 'id', 'Pengeluaran')
+    // Read before delete so notify can include record details in the deletion message.
     const existing = await prisma.expense.findUnique({
       where: { id },
       include: { kapling: { select: { name: true } } },
@@ -457,6 +459,7 @@ export async function deleteSale(
 ): Promise<ActionResult> {
   try {
     const id = requiredText(formData, 'id', 'Hasil panen')
+    // Read before delete so notify can include record details in the deletion message.
     const existing = await prisma.sale.findUnique({
       where: { id },
       include: { kapling: { select: { name: true } } },
