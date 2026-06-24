@@ -9,6 +9,22 @@ export function getCurrentMonthRange(now = new Date()) {
   return { start, end }
 }
 
+// Jam saat ini menurut zona waktu Jakarta (0–23), independen dari TZ server.
+export function getJakartaHour(now = new Date()) {
+  const hour = new Intl.DateTimeFormat('en-US', {
+    timeZone: appTimeZone,
+    hour: '2-digit',
+    hourCycle: 'h23',
+  }).format(now)
+
+  return Number(hour)
+}
+
+// Format tanggal/waktu "sekarang" selalu memakai zona Jakarta, bukan TZ server.
+export function formatJakartaNow(options: Intl.DateTimeFormatOptions, now = new Date()) {
+  return new Intl.DateTimeFormat('id-ID', { timeZone: appTimeZone, ...options }).format(now)
+}
+
 export function toDateInputValue(date: Date | string) {
   const value = typeof date === 'string' ? new Date(date) : date
   const { year, month, day } = getJakartaDateParts(value)

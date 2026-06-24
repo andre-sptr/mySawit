@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { SummaryCards } from '@/components/summary-cards'
-import { formatCurrency, formatDate, formatKg } from '@/lib/date'
+import { formatCurrency, formatDate, formatJakartaNow, formatKg, getJakartaHour } from '@/lib/date'
 import { getDashboardData } from '@/lib/sawit-data'
 
 /* ─── Helpers ─── */
@@ -38,12 +38,11 @@ export default async function Home() {
   } = await getDashboardData()
 
   const now     = new Date()
-  const hour    = now.getHours()
-  const greeting = getGreeting(hour)
+  const greeting = getGreeting(getJakartaHour(now))
 
-  const dayName   = now.toLocaleString('id-ID', { weekday: 'long' })
-  const dateLabel = now.toLocaleString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
-  const monthLabel = now.toLocaleString('id-ID', { month: 'long', year: 'numeric' })
+  const dayName   = formatJakartaNow({ weekday: 'long' }, now)
+  const dateLabel = formatJakartaNow({ day: 'numeric', month: 'long', year: 'numeric' }, now)
+  const monthLabel = formatJakartaNow({ month: 'long', year: 'numeric' }, now)
 
   const isProfit = summary.netProfit >= 0
   const maxRevenue = Math.max(...kaplingStats.map(k => k.revenue), 1)

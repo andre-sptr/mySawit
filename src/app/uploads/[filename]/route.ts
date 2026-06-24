@@ -3,12 +3,17 @@ import path from 'path'
 import { readFile } from 'fs/promises'
 import { existsSync } from 'fs'
 
+const uploadsDir = path.join(process.cwd(), 'public', 'uploads')
+
 export async function GET(request: NextRequest, { params }: { params: Promise<{ filename: string }> }) {
   const resolvedParams = await params;
-  const filename = resolvedParams.filename;
-  const filePath = path.join(process.cwd(), 'public', 'uploads', filename)
+  // Buang komponen direktori agar nama jahat seperti "../../.env" tidak bisa
+  // keluar dari folder uploads (path traversal).
+  const filename = path.basename(resolvedParams.filename)
+  const filePath = path.join(uploadsDir, filename)
 
-  if (!existsSync(filePath)) {
+  // Pertahanan berlapis: tolak apa pun yang resolve ke luar folder uploads.
+  if (!filePath.startsWith(uploadsDir + path.sep) || !existsSync(filePath)) {
     return new NextResponse('File not found', { status: 404 })
   }
 
@@ -29,7 +34,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         'Cache-Control': 'public, max-age=31536000, immutable',
       },
     })
-  } catch (error) {
+  } catch {
     return new NextResponse('Error reading file', { status: 500 })
   }
 }
